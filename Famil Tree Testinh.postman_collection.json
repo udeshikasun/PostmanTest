@@ -1,0 +1,1250 @@
+{
+	"info": {
+		"_postman_id": "9055e6ba-dce5-461b-abc8-7ee19a94a57b",
+		"name": "Famil Tree Testinh",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create a tree",
+			"item": [
+				{
+					"name": "Create a tree",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"onlineId\": \"SNSSSS00004\",\r\n    \"familyProjectName\": \"Peter Family Tree\",\r\n    \"individual\": {\r\n        \"GivenName\": \"Henrik \",\r\n        \"MiddleName\": \"\",\r\n        \"Patronomical\": \"\",\r\n        \"Prefix\": \"\",\r\n        \"Sufix\": \"\",\r\n        \"Surname\": \"Pedersen\",\r\n        \"Gender\": \"M\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://dev.ftv10.embla.no/Client/FamilyTreeRestful/createFamilyProject",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftv10",
+								"embla",
+								"no"
+							],
+							"path": [
+								"Client",
+								"FamilyTreeRestful",
+								"createFamilyProject"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get the Token",
+			"item": [
+				{
+					"name": "Get the Token",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var moment = require('moment');\r",
+									"\r",
+									"pm.environment.set('currentdate', moment().format((\"YYYYMMDD\")));\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"FileName\": \"IRestore_Peter Family Tree_with_multimedia_{{currentdate}}\",\r\n    \"EncryptedEmail\": \"/C6Q5EBpv3SPfuINLBTwZ7aF5Y7VtOMY\",\r\n    \"OnlineId\": \"SNSSSS00004\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://dev.ftwebcore.embla.no/api/token",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftwebcore",
+								"embla",
+								"no"
+							],
+							"path": [
+								"api",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify the Tree",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"setTimeout(function(){}, [10000]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://dev.ftwebcore.embla.no/api/individual/1",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftwebcore",
+								"embla",
+								"no"
+							],
+							"path": [
+								"api",
+								"individual",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Add People",
+			"item": [
+				{
+					"name": "Add Father",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"gender\": \"M\",\r\n    \"memberName\": \"Christian Pedersen\",\r\n    \"relatedFamilyId\": 0,\r\n    \"relatedMemberId\": 1,\r\n    \"relatedMemberGender\": null\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://dev.ftwebcore.embla.no/api/individual/parent",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftwebcore",
+								"embla",
+								"no"
+							],
+							"path": [
+								"api",
+								"individual",
+								"parent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Mother",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"gender\": \"F\",\r\n    \"memberName\": \"Camilla Nilsen\",\r\n    \"relatedFamilyId\": 1,\r\n    \"relatedMemberId\": 1,\r\n    \"relatedMemberGender\": null\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://dev.ftwebcore.embla.no/api/individual/parent",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftwebcore",
+								"embla",
+								"no"
+							],
+							"path": [
+								"api",
+								"individual",
+								"parent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add a Sibling",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"gender\": \"M\",\r\n    \"memberName\": \"Egil Pedersen\",\r\n    \"relatedFamilyId\": 1,\r\n    \"relatedMemberId\": 1,\r\n    \"relatedMemberGender\": \"M\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://dev.ftwebcore.embla.no/api/individual/sibling",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftwebcore",
+								"embla",
+								"no"
+							],
+							"path": [
+								"api",
+								"individual",
+								"sibling"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add spouse",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"gender\": \"F\",\r\n    \"memberName\": \"Anna Olsen\",\r\n    \"relatedFamilyId\": 0,\r\n    \"relatedMemberId\": 1,\r\n    \"relatedMemberGender\": \"M\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://dev.ftwebcore.embla.no/api/individual/spouse",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftwebcore",
+								"embla",
+								"no"
+							],
+							"path": [
+								"api",
+								"individual",
+								"spouse"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Child",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"gender\": \"F\",\r\n    \"memberName\": \"Cathrine Pedersen\",\r\n    \"relatedFamilyId\": 2,\r\n    \"relatedMemberId\": 1,\r\n    \"relatedMemberGender\": \"F\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://dev.ftwebcore.embla.no/api/individual/child",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftwebcore",
+								"embla",
+								"no"
+							],
+							"path": [
+								"api",
+								"individual",
+								"child"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify the Post Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Father\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data[1].displayName).to.eql(\"Christian Pedersen \");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Mother\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data[3].displayName).to.eql(\"Cecilie Olsen \");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Sibling\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data[2].displayName).to.eql(\"Egil Pedersen \");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Spouse\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data[7].displayName).to.eql(\"Camilla Nilsen \");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Child\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data[6].displayName).to.eql(\"Cathrine Pedersen \");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://dev.ftwebcore.embla.no/api/individual",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftwebcore",
+								"embla",
+								"no"
+							],
+							"path": [
+								"api",
+								"individual"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add a Child for Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{\r\n    \"gender\": \"F\",\r\n    \"memberName\": \"Daniel Johansen\",\r\n    \"relatedFamilyId\": 17,\r\n    \"relatedMemberId\": 1,\r\n    \"relatedMemberGender\": \"M\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://dev.ftwebcore.embla.no/api/individual/child",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftwebcore",
+								"embla",
+								"no"
+							],
+							"path": [
+								"api",
+								"individual",
+								"child"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"birthEvent\": {\r\n        \"id\": 0,\r\n        \"type\": 0,\r\n        \"placeId\": 0,\r\n        \"place\": {\r\n            \"id\": 0,\r\n            \"type\": \"0\"\r\n        }\r\n    },\r\n    \"deathEvent\": {\r\n        \"id\": 0,\r\n        \"type\": 0,\r\n        \"placeId\": 0,\r\n        \"place\": {\r\n            \"id\": 0,\r\n            \"type\": \"0\"\r\n        }\r\n    },\r\n    \"multimedia\": [],\r\n    \"id\": 10,\r\n    \"givenName\": \"Daniel\",\r\n    \"surname\": \"Pedersen\",\r\n    \"gender\": \"F\",\r\n    \"isAlive\": false,\r\n    \"aliveStatus\": 0,\r\n    \"isBiographicalSupression\": false,\r\n    \"isMedicalSupression\": false,\r\n    \"isSearchSupression\": false,\r\n    \"isCalenderSupression\": false,\r\n    \"displayName\": \"Daniel Johansen \"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://dev.ftwebcore.embla.no/api/individual/child",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftwebcore",
+								"embla",
+								"no"
+							],
+							"path": [
+								"api",
+								"individual",
+								"child"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add a wrong child",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"gender\": \"M\",\r\n    \"memberName\": \"Andersen \",\r\n    \"relatedFamilyId\": 1,\r\n    \"relatedMemberId\": 11,\r\n    \"relatedMemberGender\": \"F\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://dev.ftwebcore.embla.no/api/individual/child",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftwebcore",
+								"embla",
+								"no"
+							],
+							"path": [
+								"api",
+								"individual",
+								"child"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete the Wromg Child",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://dev.ftwebcore.embla.no/api/individual/9",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftwebcore",
+								"embla",
+								"no"
+							],
+							"path": [
+								"api",
+								"individual",
+								"9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Add events",
+			"item": [
+				{
+					"name": "Event Controller",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"place\": {},\r\n    \"multimedia\": [],\r\n    \"sourceCitations\": [],\r\n    \"witness\": [],\r\n    \"name\": \"Navn\",\r\n    \"date\": {\r\n        \"isValidDate\": true,\r\n        \"genealogyDate\": {\r\n            \"culture\": \"no\",\r\n            \"originalStr\": \"\",\r\n            \"isVaildDate\": false\r\n        }\r\n    },\r\n    \"note\": \"new\",\r\n    \"description\": \"Name\",\r\n    \"referenceId\": 1,\r\n    \"referenceType\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://dev.ftwebcore.embla.no/api/event",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftwebcore",
+								"embla",
+								"no"
+							],
+							"path": [
+								"api",
+								"event"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://dev.ftwebcore.embla.no/api/event/3",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftwebcore",
+								"embla",
+								"no"
+							],
+							"path": [
+								"api",
+								"event",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"place\": {},\r\n    \"multimedia\": [],\r\n    \"sourceCitations\": [],\r\n    \"witness\": [],\r\n    \"name\": \"Navn\",\r\n    \"date\": {\r\n        \"isValidDate\": true,\r\n        \"genealogyDate\": {\r\n            \"culture\": \"no\",\r\n            \"originalStr\": \"\",\r\n            \"isVaildDate\": false\r\n        }\r\n    },\r\n    \"note\": \"Demo\",\r\n    \"description\": \"Demo Upload\",\r\n    \"referenceId\": 1,\r\n    \"referenceType\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://dev.ftwebcore.embla.no/api/event",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftwebcore",
+								"embla",
+								"no"
+							],
+							"path": [
+								"api",
+								"event"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "MultiMedia",
+			"item": [
+				{
+					"name": "Post Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "files",
+									"type": "file",
+									"src": "/C:/Users/DimanthaS/Desktop/Family tree pics/demo.jpeg"
+								},
+								{
+									"key": "basicInfo",
+									"value": "{\"date\":{\"isValidDate\":true,\"genealogyDate\":{\"culture\":\"no\",\"originalStr\":\"\",\"isVaildDate\":false}},\"id\":1,\"cropInfo\":{\"X\":80,\"Y\":0,\"Width\":159,\"Height\":159},\"fileName\":\"1.jpg\",\"mediaType\":1}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://dev.ftwebcore.embla.no/api/multimedia/",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftwebcore",
+								"embla",
+								"no"
+							],
+							"path": [
+								"api",
+								"multimedia",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"File Upload Post request \", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data[0].caption).to.eql(\"1.jpg\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://dev.ftwebcore.embla.no/api/multimedia/",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftwebcore",
+								"embla",
+								"no"
+							],
+							"path": [
+								"api",
+								"multimedia",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a Media",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "files",
+									"type": "file",
+									"src": "/C:/Users/DimanthaS/Desktop/Family tree pics/new.jpg"
+								},
+								{
+									"key": "basicInfo",
+									"value": "{\"id\":1,\"caption\":\"newdemo.jpg\",\"fileName\":\"5.jpg\",\"date\":{\"genealogyDate\":{\"culture\":\"no\",\"originalStr\":\"\",\"isVaildDate\":false},\"isValidDate\":true},\"mediaUrl\":\"http://dev.ftwebcore.embla.no/api/multimedia/75/0/1/file?onlineId=SNSSSS00004&fileName=IRestore_Arvid Main Family Tree_with_multimedia_20210712\",\"originalMediaUrl\":\"http://dev.ftwebcore.embla.no/api/multimedia/75/2/1/file?onlineId=SNSSSS00004&fileName=IRestore_Arvid Main Family Tree_with_multimedia_20210712\",\"mediaType\":1,\"cropInfo\":{\"X\":38,\"Y\":0,\"Width\":190,\"Height\":190},\"isPrimary\":false,\"isNonProfile\":false}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://dev.ftwebcore.embla.no/api/multimedia/",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftwebcore",
+								"embla",
+								"no"
+							],
+							"path": [
+								"api",
+								"multimedia",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Put Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify the PUT request\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data[0].fileName).to.eql(\"5.jpg\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://dev.ftwebcore.embla.no/api/multimedia/",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftwebcore",
+								"embla",
+								"no"
+							],
+							"path": [
+								"api",
+								"multimedia",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post request for delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "files",
+									"type": "file",
+									"src": "/C:/Users/DimanthaS/Desktop/Family tree pics/images.jpg"
+								},
+								{
+									"key": "basicInfo",
+									"value": "{\"date\":{\"isValidDate\":true,\"genealogyDate\":{\"culture\":\"no\",\"originalStr\":\"\",\"isVaildDate\":false}},\"id\":3,\"cropInfo\":{\"X\":80,\"Y\":0,\"Width\":159,\"Height\":159},\"fileName\":\"new.jpg\",\"mediaType\":1}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://dev.ftwebcore.embla.no/api/multimedia/",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftwebcore",
+								"embla",
+								"no"
+							],
+							"path": [
+								"api",
+								"multimedia",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Request for delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://dev.ftwebcore.embla.no/api/multimedia/7",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftwebcore",
+								"embla",
+								"no"
+							],
+							"path": [
+								"api",
+								"multimedia",
+								"7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delete the Project",
+			"item": [
+				{
+					"name": "Delete the Project",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://dev.ftwebcore.embla.no/api/test/delete-project",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftwebcore",
+								"embla",
+								"no"
+							],
+							"path": [
+								"api",
+								"test",
+								"delete-project"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successfully deleted\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://dev.ftwebcore.embla.no/api/test/delete-project",
+							"protocol": "http",
+							"host": [
+								"dev",
+								"ftwebcore",
+								"embla",
+								"no"
+							],
+							"path": [
+								"api",
+								"test",
+								"delete-project"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
